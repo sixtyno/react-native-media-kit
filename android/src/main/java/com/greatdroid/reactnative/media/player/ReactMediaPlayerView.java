@@ -67,6 +67,11 @@ public class ReactMediaPlayerView extends FrameLayout implements LifecycleEventL
     private final MediaPlayerController.BaseEventListener l = new MediaPlayerController.BaseEventListener() {
 
         @Override
+        public void onError(Exception e) {
+            mediaPlayerListener.onPlayerError(e.getMessage());
+        }
+
+        @Override
         public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
             measureAndLayout.run();
         }
@@ -353,6 +358,8 @@ public class ReactMediaPlayerView extends FrameLayout implements LifecycleEventL
         void onPlayerPaused();
 
         void onPlayerFinished();
+
+        void onPlayerError(String error);
 
         void onPlayerBuffering();
 

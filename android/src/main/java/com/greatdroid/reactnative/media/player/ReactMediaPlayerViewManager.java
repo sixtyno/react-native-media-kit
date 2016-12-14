@@ -28,6 +28,7 @@ public class ReactMediaPlayerViewManager extends SimpleViewManager<ReactMediaPla
     public static final String EVENT_ON_PLAYER_BUFFERING = "onPlayerBuffering";
     public static final String EVENT_ON_PLAYER_BUFFER_OK = "onPlayerBufferOK";
     public static final String EVENT_ON_PLAYER_FINISHED = "onPlayerFinished";
+    public static final String EVENT_ON_PLAYER_ERROR = "onPlayerError";
     public static final String EVENT_ON_PLAYER_RECEIVE_METADATA = "onMetadata";
     public static final int CMD_PLAY = 1;
     public static final int CMD_PAUSE = 2;
@@ -130,6 +131,26 @@ public class ReactMediaPlayerViewManager extends SimpleViewManager<ReactMediaPla
                             @Override
                             public void dispatch(RCTEventEmitter rctEventEmitter) {
                                 rctEventEmitter.receiveEvent(getViewTag(), getEventName(), null);
+                            }
+                        });
+            }
+
+            @Override
+            public void onPlayerError(final String error) {
+
+                reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher()
+                        .dispatchEvent(new Event(view.getId(), SystemClock.uptimeMillis()) {
+                            @Override
+                            public String getEventName() {
+                                return EVENT_ON_PLAYER_ERROR;
+                            }
+
+                            @Override
+                            public void dispatch(RCTEventEmitter rctEventEmitter) {
+                                Log.w("MYTAG", "dispatching error");
+                                WritableMap map = new WritableNativeMap();
+                                map.putString("error", error);
+                                rctEventEmitter.receiveEvent(getViewTag(), getEventName(), map);
                             }
                         });
             }
@@ -241,6 +262,7 @@ public class ReactMediaPlayerViewManager extends SimpleViewManager<ReactMediaPla
                 .put(EVENT_ON_PLAYER_BUFFER_OK, MapBuilder.of("registrationName", EVENT_ON_PLAYER_BUFFER_OK))
                 .put(EVENT_ON_PLAYER_BUFFER_CHANGE, MapBuilder.of("registrationName", EVENT_ON_PLAYER_BUFFER_CHANGE))
                 .put(EVENT_ON_PLAYER_FINISHED, MapBuilder.of("registrationName", EVENT_ON_PLAYER_FINISHED))
+                .put(EVENT_ON_PLAYER_ERROR, MapBuilder.of("registrationName", EVENT_ON_PLAYER_ERROR))
                 .put(EVENT_ON_PLAYER_RECEIVE_METADATA, MapBuilder.of("registrationName", EVENT_ON_PLAYER_RECEIVE_METADATA))
                 .build();
     }
