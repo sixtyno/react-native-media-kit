@@ -147,7 +147,6 @@ public class ReactMediaPlayerViewManager extends SimpleViewManager<ReactMediaPla
 
                             @Override
                             public void dispatch(RCTEventEmitter rctEventEmitter) {
-                                Log.w("MYTAG", "dispatching error");
                                 WritableMap map = new WritableNativeMap();
                                 map.putString("error", error);
                                 rctEventEmitter.receiveEvent(getViewTag(), getEventName(), map);

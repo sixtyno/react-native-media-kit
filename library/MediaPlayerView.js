@@ -246,7 +246,6 @@ export default class MediaPlayerView extends React.Component {
   _onPlayerError(e) {
 
     let error = e.nativeEvent.error;
-    console.warn("yo error");
 
     this.props.onPlayerError && this.props.onPlayerError(error);
 
